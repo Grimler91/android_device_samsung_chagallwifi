@@ -34,7 +34,7 @@ TARGET_BOARD_INFO_FILE ?= device/samsung/chagallwifi/board-info.txt
 USE_CLANG_PLATFORM_BUILD := true
 
 # GPS-shims
-TARGET_LD_SHIM_LIBS := /system/bin/gpsd|libshim.so
+TARGET_LD_SHIM_LIBS := /system/bin/gpsd|libdmitry.so
 
 # Kernel
 TARGET_KERNEL_CONFIG := lineageos_chagallwifi_defconfig

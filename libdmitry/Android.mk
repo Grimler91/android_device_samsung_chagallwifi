@@ -1,4 +1,5 @@
-# Copyright (C) 2016 The Android Open Source Project
+# Copyright (C) 2015 The Android Open Source Project
+# Written by Dmitry Grinberg
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libgui libbinder libutils
-LOCAL_SRC_FILES := libshim.cpp
-LOCAL_MODULE := libshim
+LOCAL_SRC_FILES := libdmitry.c
+LOCAL_MODULE := libdmitry
 LOCAL_MODULE_TAGS := optional
 include $(BUILD_SHARED_LIBRARY)

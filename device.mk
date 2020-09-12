@@ -51,7 +51,7 @@ PRODUCT_PACKAGES += \
 
 # Shim
 PRODUCT_PACKAGES += \
-    libshim
+    libdmitry
 
 # Permissions
 PRODUCT_COPY_FILES += \
