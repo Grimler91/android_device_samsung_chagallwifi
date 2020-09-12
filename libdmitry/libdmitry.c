@@ -24,7 +24,7 @@
  *  Due to peculiarities of the ELF format, when a binary baz imports function foo() from libbar.so,
  *   nowhere in baz's ELF file does it say that foo() must from from libbar. In fact there are two
  *   separate records. One that says that libbar is "NEED"ed, and another that says that there is an
- *   import of function "foo". What that means is that if the process wer to also load libxyz, which
+ *   import of function "foo". What that means is that if the process were to also load libxyz, which
  *   also exported foo(), there is no way to be sure which foo() would get called. Why do we care?
  *   Well, consider out problems above. We need to provide functions and variables that existing
  *   libraries no longer do. How?
@@ -33,20 +33,20 @@
  * 1. We'll edit the GPS library and replace one of its "NEED" record with one referencing a new library
  *    which we'll create. Need a library name? why not "lidmitry"?
  * 2. Make sure that lidmitry's NEED records include the library whose record we replaced in the GPS
- *    library, to make sure that the linker brings it in afterall and all symbols in it are found
+ *    library, to make sure that the linker brings it in after all and all symbols in it are found
  * 3. Implement libdmitry such that it provides the missing things and does them in such a way that the
  *    GPS library is happy.
  * 4. Complications exist:
  *   a. This would be impossible to do in C++, as the compiler would barf at us implementing random
  *      chunks of random classes we do not control. Luckily, the linker has no idea about C++, C, or other
  *      such things. C++ names get converted to special symbol names by the compiler, and thus the linker
- *      is neevr even aware of overloading or such things. This process is called mangling. So we'll just
+ *      is never even aware of overloading or such things. This process is called mangling. So we'll just
  *      export the C++ functions we need with the proper mangled names, and code them in C. This means
- *      that we need to follow the proper calling conventions by hand, etc. With some dissasembling to see
+ *      that we need to follow the proper calling conventions by hand, etc. With some disassembling to see
  *      how GCC does it, we can duplicate it here, as I did.
  *   b. Not all missing things are functions. There are a few variables that need to be exported and are
  *      not present in M's code. We have to provide them. Luckily, just like with functions, as long as our
- *      mandled name matches, the linker will be happy to make the connection for us.
+ *      mangled name matches, the linker will be happy to make the connection for us.
  *   c. Some cleanup may be needed on exit. Luckily, there is a way to register functions to be called
  *      upon library load and unload. I use that here to free some state that may be left over on exit.
  *
@@ -86,7 +86,7 @@ extern void _ZN7android13SensorManager16createEventQueueENS_7String8Ei(void **re
  * NOTES:    In L, the sensor manager exposed this lock that callers
  *           actually locked & unlocked when accessing it. In M this
  *           is no longer the case, but we still must provide it for
- *           the GPS library to be happy. It will lock nothnhing, but
+ *           the GPS library to be happy. It will lock nothing, but
  *           as long as it is a real lock and pthread_mutex_* funcs
  *           work on it, the GPS library will be happy.
  */
@@ -117,7 +117,7 @@ void _ZN7android13SensorManagerC1Ev(void *sensorMgr);
 //android::SensorManager::createEventQueue(void)
 void _ZN7android13SensorManager16createEventQueueEv(void **retVal, void *sensorMgr);
 
-//this used to exist in OpenSLL, but does not in BoringSSL - for some reason GPS library uses it anyways
+//this used to exist in OpenSSL, but does not in BoringSSL - for some reason GPS library uses it anyways
 void *CRYPTO_malloc(uint32_t sz, const char *file, uint32_t line);
 
 
@@ -132,10 +132,10 @@ void _ZNK7android13SensorManager13getSensorListEPPKPKNS_6SensorE();
  * FUNCTION: android::SensorManager::SensorManager(void)
  * USE:      INTERPOSE: construct a sensor manager object
  * NOTES:    This constructor no longer exists in M, instead now one must pass
- *           in a package name as a "string16" to the consrtuctor. Since this
+ *           in a package name as a "string16" to the constructor. Since this
  *           lib only services GPS library, it is easy for us to just do that
  *           and this provide the constructor that the GPS library wants.
- *           The package name we use if "gps.default".
+ *           The package name we use is "gps.default".
  */
 void _ZN7android13SensorManagerC1Ev(void *sensorMgr)
 {
@@ -200,7 +200,7 @@ void libEvtUnloading(void)
 {
     ALOGI("Samsung GPS interposition library unloading. Goodbye...");
     if (_ZN7android9SingletonINS_13SensorManagerEE9sInstanceE) {
-        //if an instance stil exists, free it by calling the destructor, just to be throrough
+        //if an instance still exists, free it by calling the destructor, just to be thorough
         _ZN7android13SensorManagerD1Ev(_ZN7android9SingletonINS_13SensorManagerEE9sInstanceE);
         _ZN7android9SingletonINS_13SensorManagerEE9sInstanceE = NULL;
     }
